@@ -1,0 +1,4 @@
+/target
+*.wav*
+config.toml
+.DS_Store
