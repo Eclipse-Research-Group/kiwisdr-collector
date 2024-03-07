@@ -1,13 +1,12 @@
-use std::{collections::HashMap, path::Path};
-
+pub mod sdr;
 use colored::Colorize;
 use hound::{Sample, WavSpec, WavWriter};
-use kiwisdr::{
-    kiwi::{AMTuning, AgcConfig, Station},
-    KiwiSdrBuilder, KiwiSdrError, KiwiSdrSndClient,
-};
+use sdr::kiwi::{KiwiSdrBuilder, KiwiSdrError, KiwiSdrSndClient};
 use serde::Deserialize;
+use std::{collections::HashMap, path::Path};
 use url::Url;
+
+use crate::sdr::{AMTuning, AgcConfig, Station};
 
 #[derive(Debug, Deserialize, PartialEq, Eq)]
 enum WebSdrScraperType {
@@ -46,7 +45,7 @@ struct Config {
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 10)]
 async fn main() {
-    simple_logger::init_with_level(log::Level::Debug).unwrap();
+    simple_logger::init_with_level(log::Level::Info).unwrap();
 
     let config_contents = std::fs::read_to_string("config.toml").unwrap();
     let config = toml::from_str::<Config>(&config_contents).unwrap();
